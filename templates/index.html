@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<form class="row mb-3" method="get" action="{{ url_for('index') }}">
+  <div class="col-md-5">
+    <input type="text" class="form-control" name="search" placeholder="Pesquisar por nome" value="{{ search }}">
+  </div>
+  <div class="col-md-4">
+    <select name="category" class="form-select">
+      <option value="">Todas as disciplinas</option>
+      {% for cat in categories %}
+        <option value="{{ cat }}" {% if cat==current_category %}selected{% endif %}>{{ cat }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+  </div>
+</form>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Imagem</th>
+      <th>Nome</th>
+      <th>Categoria</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td>{% if item.image_filename %}<img src="{{ url_for('uploaded_image', filename=item.image_filename) }}" alt="{{ item.name }}" width="100">{% endif %}</td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.category }}</td>
+      <td>
+        {% if item.file_filename %}<a class="btn btn-success btn-sm" href="{{ url_for('uploaded_file', filename=item.file_filename) }}">Baixar</a>{% endif %}
+        <a class="btn btn-secondary btn-sm" href="{{ url_for('edit_item', item_id=item.id) }}">Editar</a>
+        <form method="post" action="{{ url_for('delete_item', item_id=item.id) }}" style="display:inline-block" onsubmit="return confirm('Deseja remover?');">
+          <button class="btn btn-danger btn-sm" type="submit">Excluir</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

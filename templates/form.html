@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label class="form-label">Nome</label>
+    <input type="text" name="name" class="form-control" value="{{ item.name if item else '' }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Descrição</label>
+    <textarea name="description" class="form-control">{{ item.description if item else '' }}</textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Disciplina</label>
+    <input type="text" name="category" class="form-control" value="{{ item.category if item else '' }}">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Imagem</label>
+    <input type="file" name="image" class="form-control">
+    {% if item and item.image_filename %}
+    <img src="{{ url_for('uploaded_image', filename=item.image_filename) }}" width="150" class="mt-2">
+    {% endif %}
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Arquivo STL</label>
+    <input type="file" name="file" class="form-control">
+    {% if item and item.file_filename %}
+    <a href="{{ url_for('uploaded_file', filename=item.file_filename) }}" class="btn btn-link">Arquivo atual</a>
+    {% endif %}
+  </div>
+  <button type="submit" class="btn btn-primary">Salvar</button>
+  <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
